@@ -1,0 +1,20 @@
+local outline = require("outline-shader.outline")
+
+function init(self)
+	msg.post("@render:", "clear_color", { color = vmath.vector4(55 / 255, 85 / 255, 130 / 255, 0) })
+	msg.post(".", "acquire_input_focus")
+	msg.post("@render:", "use_camera_projection")
+	msg.post("camera", "acquire_camera_focus")
+
+	-- OUTLINE
+	local thickness = 1.0
+	local color = vmath.vector4(0.0, 0.0, 0.0, 0.0)
+	outline.draw(true)
+	outline.set_tag('model')
+	outline.set(thickness, color, outline.type.OUTLINE_INVERTED_HULL)
+
+	-- LIGHT
+	local light_pos = go.get_position('/light')
+	self.light = vmath.vector4(light_pos.x, light_pos.y, light_pos.z, 0)
+	go.set("/chestnut#model", "light", self.light)
+end

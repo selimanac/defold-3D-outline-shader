@@ -1,0 +1,5 @@
+script: "/render/default.render_script"
+render_resources {
+  name: "outline"
+  path: "/outline-shader/outline.material"
+}
