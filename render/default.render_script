@@ -194,10 +194,10 @@ function update(self)
 
     -- REMOVE THIS BLOCK IF YOU ARE GOING TO USE MODEL TAG
     -- render `model` predicate for default 3D material-
-    render.enable_state(graphics.STATE_CULL_FACE)
-    render.draw(predicates.model, camera_world.frustum)
-    render.set_depth_mask(false)
-    render.disable_state(graphics.STATE_CULL_FACE)
+    -- render.enable_state(graphics.STATE_CULL_FACE)
+    -- render.draw(predicates.model, camera_world.frustum)
+    -- render.set_depth_mask(false)
+    -- render.disable_state(graphics.STATE_CULL_FACE)
     -----------------------------------------------------
 
     -- render the other components: sprites, tilemaps, particles etc
