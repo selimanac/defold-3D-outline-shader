@@ -1,16 +1,15 @@
-local outline = {}
+local outline           = {}
 
-outline.type = {
+outline.type            = {
 	OUTLINE_STENCIL = 1,
 	OUTLINE_INVERTED_HULL = 2
 }
-
 
 local draw_outline      = false
 local outline_color     = vmath.vector4(1.0, 0.0, 0.0, 1.0)
 local outline_thickness = vmath.vector4(0.5)
 local outline_type      = 1
-local outline_predicate = "model"
+local outline_predicate = "outline"
 
 ---@param thickness number
 ---@param color vector4
@@ -36,7 +35,7 @@ function outline.init(self)
 	self.outline_constant_buffer = render.constant_buffer()
 end
 
-function outline.update(self, predicates, frustum)
+function outline.update(self, predicates, frustum, clear_buffer)
 	self.outline_constant_buffer.outline_color = outline_color
 	self.outline_constant_buffer.outline_width = outline_thickness
 
@@ -61,26 +60,19 @@ function outline.update(self, predicates, frustum)
 			render.set_stencil_func(graphics.COMPARE_FUNC_ALWAYS, 0, 0xFF)
 			render.disable_state(graphics.STATE_STENCIL_TEST)
 		elseif outline_type == outline.type.OUTLINE_INVERTED_HULL then
-			render.enable_state(graphics.STATE_DEPTH_TEST)
 			render.enable_state(graphics.STATE_CULL_FACE)
 
 			render.set_cull_face(graphics.FACE_TYPE_BACK)
 			render.draw(predicates.outline, { frustum = frustum.frustum })
-
 			render.set_cull_face(graphics.FACE_TYPE_FRONT)
+
 			render.enable_material("outline")
 			render.draw(predicates.outline, { frustum = frustum.frustum, constants = self.outline_constant_buffer })
 			render.disable_material()
 
-			render.set_cull_face(graphics.FACE_TYPE_BACK) -- revert back the default mode, i.e. FACE_BACK
+			render.set_cull_face(graphics.FACE_TYPE_BACK) -- revert back the default mode
 			render.disable_state(graphics.STATE_CULL_FACE)
 		end
-	else
-		-- render predicate for default 3D material
-		--
-		render.enable_state(graphics.STATE_CULL_FACE)
-		render.draw(predicates.outline, frustum)
-		render.disable_state(graphics.STATE_CULL_FACE)
 	end
 end
 

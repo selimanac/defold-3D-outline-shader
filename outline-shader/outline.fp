@@ -1,7 +1,17 @@
 #version 330
 
-uniform uniforms_fs { mediump vec4 outline_color; };
+
+in highp vec4 var_position;
+in mediump vec3 var_normal;
+
+uniform uniforms_fs
+{
+    mediump vec4 outline_color;
+};
 
 out vec4 fragColor;
 
-void main() { fragColor = outline_color; }
+void     main()
+{
+    fragColor = outline_color;
+}

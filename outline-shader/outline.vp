@@ -1,31 +1,26 @@
 #version 330
 
-in highp vec4 position;
+in highp vec4   position;
 in mediump vec2 texcoord0;
 in mediump vec3 normal;
-in mediump vec4 color; // When exporting 3d model the vertex color attributes
-                       // must be exported
+in mediump vec4 color; // When exporting a 3D model, the vertex color attributes must be included.”
 
-uniform uniforms_vs {
-  mediump mat4 mtx_worldviewproj;
-  mediump mat4 mtx_world;
-  mediump vec4 outline_width;
+in mediump mat4 mtx_world;
+in mediump mat4 mtx_normal;
+
+uniform uniforms_vs
+{
+    mediump mat4 mtx_worldviewproj;
+    mediump vec4 outline_width;
+    mediump vec4 object_scale; // <- for non-uniform scale, pass the scale
 };
 
-void main() {
+void main()
+{
+    vec3 adjusted_outline = outline_width.x / object_scale.xyz; // <- for non-uniform scale
 
-  float scale_x = length(mtx_world * vec4(1.0, 0.0, 0.0, 0.0));
-  float scale_y = length(mtx_world * vec4(0.0, 1.0, 0.0, 0.0));
-  float scale_z = length(mtx_world * vec4(0.0, 0.0, 1.0, 0.0));
-  vec3 scaled_outline_width = outline_width.x / vec3(scale_x, scale_y, scale_z);
-
-  vec3 outline_offset = normal.xyz * scaled_outline_width;
-  // vec3 outline_offset = color.xyz * scaled_outline_width; // this is for only
-  //   color attributes from model
-  // vec3 outline_offset = normalize(position.xyz)  * scaled_outline_width;
-  // // position based
-
-  vec3 new_position = position.xyz + outline_offset;
-
-  gl_Position = mtx_worldviewproj * vec4(new_position.xyz, 1.0);
+    //   vec3 outline_offset = color.xyz * adjusted_outline; // <- for vertex color attributes
+    vec3 outline_offset = normal * adjusted_outline;
+    vec3 new_position = position.xyz + outline_offset;
+    gl_Position = mtx_worldviewproj * vec4(new_position, 1.0);
 }

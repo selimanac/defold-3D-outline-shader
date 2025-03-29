@@ -9,3 +9,6 @@ Thumbs.db
 .cproject
 builtins
 /dev
+/.editor_settings
+build_config.json
+.clang-format

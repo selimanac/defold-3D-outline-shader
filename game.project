@@ -1,13 +1,13 @@
 [bootstrap]
-main_collection = /main/main.collectionc
+main_collection = /example/example.collectionc
 render = /render/default.renderc
 
 [script]
 shared_state = 1
 
 [display]
-width = 960
-height = 640
+width = 1280
+height = 720
 
 [android]
 input_method = HiddenInputField
