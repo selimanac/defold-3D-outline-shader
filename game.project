@@ -26,3 +26,6 @@ bundle_identifier = com.defold.example.basic3d
 [ios]
 bundle_identifier = com.defold.example.basic3d
 
+[library]
+include_dirs = outline-shader
+
